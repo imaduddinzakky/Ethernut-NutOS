@@ -1,0 +1,150 @@
+GAS LISTING C:\Users\acer\AppData\Local\Temp/cc22NQCS.s 			page 1
+
+
+   1               		.file	"DoubleThreads.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.section	.text.TimerTick,"ax",@progbits
+   9               	.global	TimerTick
+  10               		.type	TimerTick, @function
+  11               	TimerTick:
+  12               	/* prologue: function */
+  13               	/* frame size = 0 */
+  14 0000 8091 0000 		lds r24,tick_count.2181
+  15 0004 9091 0000 		lds r25,(tick_count.2181)+1
+  16 0008 A091 0000 		lds r26,(tick_count.2181)+2
+  17 000c B091 0000 		lds r27,(tick_count.2181)+3
+  18 0010 0196      		adiw r24,1
+  19 0012 A11D      		adc r26,__zero_reg__
+  20 0014 B11D      		adc r27,__zero_reg__
+  21 0016 8093 0000 		sts tick_count.2181,r24
+  22 001a 9093 0000 		sts (tick_count.2181)+1,r25
+  23 001e A093 0000 		sts (tick_count.2181)+2,r26
+  24 0022 B093 0000 		sts (tick_count.2181)+3,r27
+  25               	/* epilogue start */
+  26 0026 0895      		ret
+  27               		.size	TimerTick, .-TimerTick
+  28               		.data
+  29               	.LC0:
+  30 0000 7431 00   		.string	"t1"
+  31               	.LC1:
+  32 0003 7432 00   		.string	"t2"
+  33               		.section	.text.NutAppMain,"ax",@progbits
+  34               	.global	NutAppMain
+  35               		.type	NutAppMain, @function
+  36               	NutAppMain:
+  37               	/* prologue: function */
+  38               	/* frame size = 0 */
+  39 0000 8FEF      		ldi r24,lo8(-1)
+  40 0002 87BB      		out 55-32,r24
+  41 0004 18BA      		out 56-32,__zero_reg__
+  42 0006 80E0      		ldi r24,lo8(.LC0)
+  43 0008 90E0      		ldi r25,hi8(.LC0)
+  44 000a 60E0      		ldi r22,lo8(gs(Thread1))
+  45 000c 70E0      		ldi r23,hi8(gs(Thread1))
+  46 000e 40E0      		ldi r20,lo8(0)
+  47 0010 50E0      		ldi r21,hi8(0)
+  48 0012 20E0      		ldi r18,lo8(512)
+  49 0014 32E0      		ldi r19,hi8(512)
+  50 0016 0E94 0000 		call NutThreadCreate
+  51 001a 80E0      		ldi r24,lo8(.LC1)
+  52 001c 90E0      		ldi r25,hi8(.LC1)
+  53 001e 60E0      		ldi r22,lo8(gs(Thread2))
+  54 0020 70E0      		ldi r23,hi8(gs(Thread2))
+  55 0022 40E0      		ldi r20,lo8(0)
+  56 0024 50E0      		ldi r21,hi8(0)
+  57 0026 20E0      		ldi r18,lo8(512)
+GAS LISTING C:\Users\acer\AppData\Local\Temp/cc22NQCS.s 			page 2
+
+
+  58 0028 32E0      		ldi r19,hi8(512)
+  59 002a 0E94 0000 		call NutThreadCreate
+  60 002e 8EEF      		ldi r24,lo8(-2)
+  61 0030 0E94 0000 		call NutThreadSetPriority
+  62 0034 0E94 0000 		call NutThreadYield
+  63               	.L4:
+  64 0038 68EE      		ldi r22,lo8(1000)
+  65 003a 73E0      		ldi r23,hi8(1000)
+  66 003c 80E0      		ldi r24,hlo8(1000)
+  67 003e 90E0      		ldi r25,hhi8(1000)
+  68 0040 0E94 0000 		call NutSleep
+  69 0044 00C0      		rjmp .L4
+  70               		.size	NutAppMain, .-NutAppMain
+  71               		.section	.text.Thread2,"ax",@progbits
+  72               	.global	Thread2
+  73               		.type	Thread2, @function
+  74               	Thread2:
+  75               	/* prologue: function */
+  76               	/* frame size = 0 */
+  77 0000 10EC      		ldi r17,lo8(-64)
+  78               	.L7:
+  79 0002 18BB      		out 56-32,r17
+  80 0004 64EF      		ldi r22,lo8(500)
+  81 0006 71E0      		ldi r23,hi8(500)
+  82 0008 80E0      		ldi r24,hlo8(500)
+  83 000a 90E0      		ldi r25,hhi8(500)
+  84 000c 0E94 0000 		call NutSleep
+  85 0010 18BA      		out 56-32,__zero_reg__
+  86 0012 64EF      		ldi r22,lo8(500)
+  87 0014 71E0      		ldi r23,hi8(500)
+  88 0016 80E0      		ldi r24,hlo8(500)
+  89 0018 90E0      		ldi r25,hhi8(500)
+  90 001a 0E94 0000 		call NutSleep
+  91 001e 00C0      		rjmp .L7
+  92               		.size	Thread2, .-Thread2
+  93               		.section	.text.Thread1,"ax",@progbits
+  94               	.global	Thread1
+  95               		.type	Thread1, @function
+  96               	Thread1:
+  97               	/* prologue: function */
+  98               	/* frame size = 0 */
+  99 0000 10E3      		ldi r17,lo8(48)
+ 100               	.L10:
+ 101 0002 18BB      		out 56-32,r17
+ 102 0004 64E6      		ldi r22,lo8(100)
+ 103 0006 70E0      		ldi r23,hi8(100)
+ 104 0008 80E0      		ldi r24,hlo8(100)
+ 105 000a 90E0      		ldi r25,hhi8(100)
+ 106 000c 0E94 0000 		call NutSleep
+ 107 0010 18BA      		out 56-32,__zero_reg__
+ 108 0012 64E6      		ldi r22,lo8(100)
+ 109 0014 70E0      		ldi r23,hi8(100)
+ 110 0016 80E0      		ldi r24,hlo8(100)
+ 111 0018 90E0      		ldi r25,hhi8(100)
+ 112 001a 0E94 0000 		call NutSleep
+ 113 001e 00C0      		rjmp .L10
+ 114               		.size	Thread1, .-Thread1
+GAS LISTING C:\Users\acer\AppData\Local\Temp/cc22NQCS.s 			page 3
+
+
+ 115               		.lcomm tick_count.2181,4
+ 116               	.global __do_copy_data
+ 117               	.global __do_clear_bss
+GAS LISTING C:\Users\acer\AppData\Local\Temp/cc22NQCS.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 DoubleThreads.c
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:2      *ABS*:0000003f __SREG__
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:3      *ABS*:0000003e __SP_H__
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:4      *ABS*:0000003d __SP_L__
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:5      *ABS*:00000034 __CCP__
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:11     .text.TimerTick:00000000 TimerTick
+                             .bss:00000000 tick_count.2181
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:36     .text.NutAppMain:00000000 NutAppMain
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:96     .text.Thread1:00000000 Thread1
+C:\Users\acer\AppData\Local\Temp/cc22NQCS.s:74     .text.Thread2:00000000 Thread2
+
+UNDEFINED SYMBOLS
+NutThreadCreate
+NutThreadSetPriority
+NutThreadYield
+NutSleep
+__do_copy_data
+__do_clear_bss
