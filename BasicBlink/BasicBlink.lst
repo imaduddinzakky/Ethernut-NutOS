@@ -1,0 +1,51 @@
+GAS LISTING C:\Users\acer\AppData\Local\Temp/cce5624M.s 			page 1
+
+
+   1               		.file	"BasicBlink.c"
+   2               	__SREG__ = 0x3f
+   3               	__SP_H__ = 0x3e
+   4               	__SP_L__ = 0x3d
+   5               	__CCP__  = 0x34
+   6               	__tmp_reg__ = 0
+   7               	__zero_reg__ = 1
+   8               		.section	.text.NutAppMain,"ax",@progbits
+   9               	.global	NutAppMain
+  10               		.type	NutAppMain, @function
+  11               	NutAppMain:
+  12 0000 1F93      		push r17
+  13               	/* prologue: function */
+  14               	/* frame size = 0 */
+  15 0002 8FEF      		ldi r24,lo8(-1)
+  16 0004 87BB      		out 55-32,r24
+  17 0006 18BA      		out 56-32,__zero_reg__
+  18 0008 1FEF      		ldi r17,lo8(-1)
+  19               	.L2:
+  20 000a 18BA      		out 56-32,__zero_reg__
+  21 000c 64E6      		ldi r22,lo8(100)
+  22 000e 70E0      		ldi r23,hi8(100)
+  23 0010 80E0      		ldi r24,hlo8(100)
+  24 0012 90E0      		ldi r25,hhi8(100)
+  25 0014 0E94 0000 		call NutSleep
+  26 0018 18BB      		out 56-32,r17
+  27 001a 64E6      		ldi r22,lo8(100)
+  28 001c 70E0      		ldi r23,hi8(100)
+  29 001e 80E0      		ldi r24,hlo8(100)
+  30 0020 90E0      		ldi r25,hhi8(100)
+  31 0022 0E94 0000 		call NutSleep
+  32 0026 00C0      		rjmp .L2
+  33               		.size	NutAppMain, .-NutAppMain
+GAS LISTING C:\Users\acer\AppData\Local\Temp/cce5624M.s 			page 2
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 BasicBlink.c
+C:\Users\acer\AppData\Local\Temp/cce5624M.s:2      *ABS*:0000003f __SREG__
+C:\Users\acer\AppData\Local\Temp/cce5624M.s:3      *ABS*:0000003e __SP_H__
+C:\Users\acer\AppData\Local\Temp/cce5624M.s:4      *ABS*:0000003d __SP_L__
+C:\Users\acer\AppData\Local\Temp/cce5624M.s:5      *ABS*:00000034 __CCP__
+C:\Users\acer\AppData\Local\Temp/cce5624M.s:6      *ABS*:00000000 __tmp_reg__
+C:\Users\acer\AppData\Local\Temp/cce5624M.s:7      *ABS*:00000001 __zero_reg__
+C:\Users\acer\AppData\Local\Temp/cce5624M.s:11     .text.NutAppMain:00000000 NutAppMain
+
+UNDEFINED SYMBOLS
+NutSleep
